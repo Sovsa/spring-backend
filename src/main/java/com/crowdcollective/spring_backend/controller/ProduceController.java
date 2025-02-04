@@ -28,6 +28,7 @@ public class ProduceController {
     @GetMapping()
     public ResponseEntity<Object> getAllProduce() {
         List<ProduceResponseDTO> allProduce = produceService.getAllProduce();
+        System.out.println("Fis");
 
         return ResponseHandler.generateResponse("Getting all produce", HttpStatus.OK, allProduce);
     }
