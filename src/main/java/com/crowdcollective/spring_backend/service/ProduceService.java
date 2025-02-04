@@ -30,9 +30,6 @@ public class ProduceService {
         produce.setDescription(produceDto.description());
         produce.setAllergen(produceDto.allergen());
         produce.setDiets(Diet.getDiets(produceDto.diets()));
-        for (Diet diet : produce.getDiets()) {
-            System.out.println("Found " + diet.getPrettyName());
-        }
         produce = produceRepository.save(produce);
 
         return convertProduceToProduceResponseDTO(produce);
