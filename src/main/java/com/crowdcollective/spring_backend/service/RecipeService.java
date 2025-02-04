@@ -66,9 +66,9 @@ public class RecipeService {
 
     private Set<Ingredient> getIngredients(List<IngredientRequestDTO> ingredientRequests, Recipe recipe) {
         Set<Ingredient> ingredients = new HashSet<>();
-        Recipe newRecipe = null;
+        String newRecipe = null;
 
-        System.out.println(newRecipe.getName());
+        System.out.println(newRecipe.trim());
 
         for (IngredientRequestDTO ingredientRequest : ingredientRequests) {
             Ingredient ingredient = new Ingredient(ingredientRequest);
