@@ -67,8 +67,7 @@ public class RecipeService {
     private Set<Ingredient> getIngredients(List<IngredientRequestDTO> ingredientRequests, Recipe recipe) {
         Set<Ingredient> ingredients = new HashSet<>();
 
-        //This might be unnecessary
-        ingredients.forEach(e -> System.out.println(e.getName()));
+        System.out.println("This might be unnecessary logging");
 
         for (IngredientRequestDTO ingredientRequest : ingredientRequests) {
             Ingredient ingredient = new Ingredient(ingredientRequest);
