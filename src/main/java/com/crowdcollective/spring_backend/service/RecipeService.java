@@ -68,6 +68,7 @@ public class RecipeService {
         Set<Ingredient> ingredients = new HashSet<>();
 
         System.out.println("This might be unnecessary logging");
+        System.out.println("This might be unnecessary logging");
 
         for (IngredientRequestDTO ingredientRequest : ingredientRequests) {
             Ingredient ingredient = new Ingredient(ingredientRequest);
