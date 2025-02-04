@@ -43,6 +43,9 @@ public class RecipeService {
         Recipe recipe = null;
         if(recipeRequestDTO.recipeId() != null && recipeRequestDTO.recipeId() > 0) {
             recipe = recipeRepository.findById(recipeRequestDTO.recipeId()).orElse(null);
+            if (recipe == null) {
+                throw new NotFoundException("Could not find recipe");
+            }
             recipe.setName(recipeRequestDTO.name());
             recipe.setDescription(recipeRequestDTO.description());
             ingredientRepository.delete(recipe.getIngredients().stream().map(Ingredient::getIngredientId).collect(Collectors.toList()));
