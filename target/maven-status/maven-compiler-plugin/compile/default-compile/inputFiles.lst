@@ -17,6 +17,7 @@
 /Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/dto/response/InstructionResponseDTO.java
 /Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/dto/response/ProduceResponseDTO.java
 /Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/dto/response/RecipeResponseDTO.java
+/Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/repository/HibernateUtil.java
 /Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/repository/Ingredient/IngredientRepository.java
 /Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/repository/Ingredient/IngredientRepositoryWrapper.java
 /Users/antonnilsson/Workspace/spring-backend/src/main/java/com/crowdcollective/spring_backend/repository/Ingredient/IngredientRepositoryWrapperImpl.java

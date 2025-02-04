@@ -3,12 +3,13 @@ package com.crowdcollective.spring_backend.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.crowdcollective.exception.NotFoundException;
 import com.crowdcollective.spring_backend.dao.Ingredient;
@@ -26,7 +27,6 @@ import com.crowdcollective.spring_backend.repository.Ingredient.IngredientReposi
 import com.crowdcollective.spring_backend.repository.instruction.InstructionRepository;
 import com.crowdcollective.spring_backend.repository.produce.ProduceRepository;
 
-
 @Service
 public class RecipeService {
 
@@ -39,7 +39,8 @@ public class RecipeService {
     @Autowired
     private ProduceRepository produceRepository;
 
-    public RecipeResponseDTO saveOrUpdateRecipe(RecipeRequestDTO recipeRequestDTO) throws NotFoundException {
+    @Transactional
+    public Recipe saveOrUpdateRecipe(RecipeRequestDTO recipeRequestDTO) throws NotFoundException {
         Recipe recipe = null;
         if(recipeRequestDTO.recipeId() != null && recipeRequestDTO.recipeId() > 0) {
             recipe = recipeRepository.findById(recipeRequestDTO.recipeId()).orElse(null);
@@ -48,40 +49,43 @@ public class RecipeService {
             }
             recipe.setName(recipeRequestDTO.name());
             recipe.setDescription(recipeRequestDTO.description());
-            ingredientRepository.delete(recipe.getIngredients().stream().map(Ingredient::getIngredientId).collect(Collectors.toList()));
-            instructionRepository.delete(recipe.getInstructions().stream().map(Instruction::getInstructionId).collect(Collectors.toList()));
+            
         } else {
             recipe = new Recipe(recipeRequestDTO);
+            recipeRepository.save(recipe);
         }
 
-        recipeRepository.save(recipe);
-        Set<Instruction> instructions = getInstructions(recipeRequestDTO.instructions(), recipe);
-        Set<Ingredient> ingredients = getIngredients(recipeRequestDTO.ingredients(), recipe);
-
-        ingredientRepository.saveAll(ingredients);
-        instructionRepository.saveAll(instructions);
-        RecipeResponseDTO responseDTO = convertRecipeToRecipeResponseDTO(recipe);
+        saveInstructions(recipeRequestDTO.instructions(), recipe);
+        saveIngredients(recipeRequestDTO.ingredients(), recipe);
         
-        return responseDTO;
+        return recipe;
     }
 
-    private Set<Ingredient> getIngredients(List<IngredientRequestDTO> ingredientRequests, Recipe recipe) {
+    private Set<Ingredient> saveIngredients(List<IngredientRequestDTO> ingredientRequests, Recipe recipe) {
         Set<Ingredient> ingredients = new HashSet<>();
+        List<Integer> produceIds = ingredientRequests.stream().map(e -> e.produceId()).collect(Collectors.toList());
+        Map<Integer, Produce> produceMap = produceRepository.findAllById(produceIds).stream().collect(Collectors.toMap(e -> e.getProduceId(), e -> e));
 
         for (IngredientRequestDTO ingredientRequest : ingredientRequests) {
             Ingredient ingredient = new Ingredient(ingredientRequest);
-            Produce produce = produceRepository.findById(ingredientRequest.produceId()).orElse(null);
+            Produce produce = produceMap.get(ingredientRequest.produceId());
             if (produce == null) {
                 throw new NotFoundException("Could not find produce");
             }
             ingredient.setProduce(produce);
+            ingredient.setProduceid(produce.getProduceId());
             ingredient.setRecipe(recipe);
             ingredients.add(ingredient);
         }
+
+        recipe.removeIngredients();
+        List<Ingredient> saveAll = ingredientRepository.saveAll(ingredients);
+        recipe.getIngredients().addAll(saveAll);
+
         return ingredients;
     }
 
-    private Set<Instruction> getInstructions(List<InstructionRequestDTO> instructionRequests, Recipe recipe) {
+    private Set<Instruction> saveInstructions(List<InstructionRequestDTO> instructionRequests, Recipe recipe) {
         Set<Instruction> instructions = new HashSet<>();
 
         for (InstructionRequestDTO instructionRequest : instructionRequests) {
@@ -89,6 +93,10 @@ public class RecipeService {
             instruction.setRecipe(recipe);
             instructions.add(instruction);
         }
+        
+        recipe.removeInstructions();
+        List<Instruction> saveAll = instructionRepository.saveAll(instructions);
+        recipe.getInstructions().addAll(saveAll);
         
         return instructions;
     }
@@ -112,7 +120,7 @@ public class RecipeService {
         return recipes;
     }
 
-    private RecipeResponseDTO convertRecipeToRecipeResponseDTO(Recipe recipe) {
+    public RecipeResponseDTO convertRecipeToRecipeResponseDTO(Recipe recipe) {
         List<IngredientResponseDTO> ingredientResponse = recipe.getIngredients().stream().map(e -> new IngredientResponseDTO(e)).collect(Collectors.toList());
         List<InstructionResponseDTO> instructionResponse = recipe.getInstructions().stream().map(e -> new InstructionResponseDTO(e)).collect(Collectors.toList());
         RecipeResponseDTO responseDTO = new RecipeResponseDTO(recipe, ingredientResponse, instructionResponse);

@@ -11,7 +11,6 @@ public enum Diet {
     FISH("fish", "Fish"),
     CHICKEN("chicken", "Chicken");
 
-
     private String value;
     private String prettyName;
 

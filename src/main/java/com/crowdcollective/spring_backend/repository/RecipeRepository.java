@@ -7,5 +7,5 @@ import com.crowdcollective.spring_backend.dao.Recipe;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Integer>{
-
+    
 }

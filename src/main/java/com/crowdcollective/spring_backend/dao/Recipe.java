@@ -1,5 +1,7 @@
 package com.crowdcollective.spring_backend.dao;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.crowdcollective.spring_backend.dto.request.RecipeRequestDTO;
@@ -40,6 +42,8 @@ public class Recipe {
         }
         this.setName(recipeRequestDTO.name());
         this.setDescription(recipeRequestDTO.description());
+        this.ingredients = new HashSet<Ingredient>();
+        this.instructions = new HashSet<Instruction>();
     }
 
     public Recipe() {
@@ -70,11 +74,34 @@ public class Recipe {
     public void setInstructions(Set<Instruction> instructions) {
         this.instructions = instructions;
     }
-
     public Set<Ingredient> getIngredients() {
         return ingredients;
     }
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public void removeIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(null);
+        this.ingredients.remove(ingredient);
+    }
+
+    public void removeInstruction(Instruction instruction) {
+        instruction.setRecipe(null);
+        this.instructions.remove(instruction);
+    }
+
+    public void removeInstructions() {
+        for (Instruction instruction : this.instructions) {
+            instruction.setRecipe(null);
+        }
+        this.instructions.clear();
+    }
+
+    public void removeIngredients() {
+        for (Ingredient ingredient : this.ingredients) {
+            ingredient.setRecipe(null);
+        }
+        this.ingredients.clear();
     }
 }

@@ -23,16 +23,16 @@ public class Ingredient {
     private Float amount;
     private String unit;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produceid")
     private Produce produce;
     @Column(name = "produceid", insertable=false, updatable=false, nullable = false)
-    private Integer produceId;
+    private Integer produceid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipeid")
     private Recipe recipe;
-    @Column(name = "recipeid", insertable=false, updatable=false, nullable = false)
+    @Column(name = "recipeid", insertable=false, updatable=false)
     private Integer recipeid;
 
     public Ingredient(IngredientRequestDTO ingredientRequestDTO) {
@@ -50,12 +50,6 @@ public class Ingredient {
     }
     public void setIngredientId(Integer id) {
         this.ingredientId = id;
-    }
-    public String getName() {
-        return produce.getName();
-    }
-    public boolean isAllergen() {
-        return produce.isAllergen();
     }
     public Float getAmount() {
         return amount;
@@ -94,12 +88,12 @@ public class Ingredient {
         this.produce = produce;
     }
 
-    public Integer getProduceId() {
-        return produceId;
+    public Integer getProduceid() {
+        return produceid;
     }
 
-    public void setProduceId(Integer produceId) {
-        this.produceId = produceId;
+    public void setProduceid(Integer produceId) {
+        this.produceid = produceId;
     }
     
 }

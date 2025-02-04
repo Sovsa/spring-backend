@@ -28,7 +28,7 @@ public class Instruction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipeid")
     private Recipe recipe;
-    @Column(name = "recipeid", insertable=false, updatable=false, nullable = false)
+    @Column(name = "recipeid", insertable=false, updatable=false)
     private Integer recipeid;
     
     public Instruction(InstructionRequestDTO instructionRequestDTO) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crowdcollective.exception.NotFoundException;
+import com.crowdcollective.spring_backend.dao.Recipe;
 import com.crowdcollective.spring_backend.dto.ResponseHandler;
 import com.crowdcollective.spring_backend.dto.request.RecipeRequestDTO;
 import com.crowdcollective.spring_backend.dto.response.RecipeResponseDTO;
@@ -29,9 +30,10 @@ public class RecipeController {
 
     @PostMapping()
     public ResponseEntity<Object> saveOrUpdateRecipe(@RequestBody RecipeRequestDTO requestbody) {
-        RecipeResponseDTO recipe = recipeService.saveOrUpdateRecipe(requestbody);
+        Recipe recipe = recipeService.saveOrUpdateRecipe(requestbody);
+        RecipeResponseDTO recipeResponseDto = recipeService.convertRecipeToRecipeResponseDTO(recipe);
         
-        return ResponseHandler.generateResponse("Recipe successfully created", HttpStatus.OK, recipe);
+        return ResponseHandler.generateResponse("Recipe successfully created", HttpStatus.OK, recipeResponseDto);
     }
     
     @GetMapping("/{recipeId}")

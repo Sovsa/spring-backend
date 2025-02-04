@@ -25,6 +25,7 @@ com/crowdcollective/spring_backend/repository/instruction/InstructionRepository.
 com/crowdcollective/spring_backend/dao/Instruction.class
 com/crowdcollective/spring_backend/dto/response/InstructionResponseDTO.class
 com/crowdcollective/spring_backend/dto/request/ProduceRequestDTO.class
+com/crowdcollective/spring_backend/repository/HibernateUtil.class
 com/crowdcollective/exception/NotFoundException.class
 com/crowdcollective/spring_backend/service/ProduceService.class
 com/crowdcollective/spring_backend/dao/Produce.class
