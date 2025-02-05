@@ -10,5 +10,5 @@ jobs:
          - name: Run AI Analysis
            uses: johanake/neural-inspect-action@v1
            with:
-              github_token: ${{ secrets.GH_TOKEN }};
+              github_token: ${{ secrets.GH_TOKEN }}
               api_key: ${{ secrets.API_KEY }}
