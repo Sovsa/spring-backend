@@ -7,5 +7,5 @@ COPY pom.xml .
 RUN mvn verify --fail-never
 COPY src ./src
 RUN mvn package
-EXPOSE 8081
+EXPOSE 3000
 ENTRYPOINT ["java","-jar","/home/backend-app/target/spring-backend-0.0.1-SNAPSHOT.jar"]
